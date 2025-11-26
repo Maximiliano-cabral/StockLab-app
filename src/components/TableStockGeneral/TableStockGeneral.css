@@ -1,0 +1,103 @@
+
+.table-stock-container {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    border: 1px solid #f0f0f0;
+    margin-top: 20px;
+}
+
+
+.table-stock-container .ant-input-affix-wrapper {
+    height: 44px; 
+    border-radius: 8px;
+    font-size: 15px;
+    border-color: #d9d9d9;
+    box-shadow: none; 
+    transition: all 0.3s;
+}
+
+.table-stock-container .ant-input-affix-wrapper:hover,
+.table-stock-container .ant-input-affix-wrapper:focus,
+.table-stock-container .ant-input-affix-wrapper-focused {
+    border-color: #4096ff;
+    box-shadow: 0 0 0 3px rgba(64, 150, 255, 0.1);
+}
+
+
+.table-stock-container .ant-table-thead > tr > th {
+    background: #f9fafb !important; 
+    color: #4b5563; 
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb;
+    padding: 16px;
+}
+
+
+.table-stock-container .ant-table-tbody > tr > td {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    vertical-align: middle; 
+}
+
+
+.table-stock-container .editable-row:hover > td {
+    background-color: #f0f7ff !important; 
+    transition: background-color 0.2s;
+}
+
+
+.table-stock-container .ant-form-item {
+    margin: 0;
+}
+.table-stock-container .ant-input,
+.table-stock-container .ant-input-number {
+    border-radius: 6px;
+}
+
+.table-stock-container .ant-input-number {
+    width: 100%;
+}
+
+
+.table-stock-container .ant-btn-link {
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.table-stock-container .ant-btn-link:hover {
+    background-color: rgba(0, 0, 0, 0.04); 
+}
+
+
+@media (max-width: 768px) {
+    .table-stock-container {
+        padding: 12px; 
+        margin-top: 10px;
+    }
+
+
+    .table-stock-container .ant-input-affix-wrapper {
+        max-width: 100% !important; 
+    }
+
+
+    .table-stock-container .ant-table-thead > tr > th,
+    .table-stock-container .ant-table-tbody > tr > td {
+        padding: 12px 8px; 
+        font-size: 13px;
+    }
+
+
+    .table-stock-container .ant-tag {
+        font-size: 12px !important;
+        margin-right: 0;
+    }
+}

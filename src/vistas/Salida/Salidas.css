@@ -1,0 +1,158 @@
+
+.salidas-container h1 {
+    color: #1f2937; 
+    margin-bottom: 24px;
+}
+
+
+.salidas-container .ant-card {
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease;
+}
+
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.calendar-card .ant-card-body {
+    padding: 0 !important;
+}
+
+.calendar-wrapper {
+    padding: 10px;
+    border-radius: 0 0 12px 12px;
+    background: #fff;
+}
+
+
+.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+    height: 80px !important; 
+    border-top: 2px solid transparent; 
+}
+
+
+.calendar-events-list {
+    margin-top: 4px;
+}
+.calendar-events-list li {
+    display: flex;
+    justify-content: center;
+}
+.calendar-events-list .ant-badge-status-dot {
+    width: 8px;
+    height: 8px;
+}
+
+
+.stats-card {
+    background: linear-gradient(135deg, #fff1f0 0%, #ffffff 100%);
+    border: 1px solid #ffccc7 !important;
+}
+
+.stats-title {
+    color: #8c8c8c;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ant-statistic-content-value {
+    font-size: 36px !important;
+    font-weight: 700;
+    color: #cf1322;
+}
+
+
+.salidas-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dia-item {
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed #e5e7eb;
+}
+
+.dia-item:last-child {
+    border-bottom: none;
+}
+
+.dia-item strong {
+    color: #111827; 
+    display: block;
+    margin-bottom: 6px;
+    font-size: 15px;
+}
+
+
+.cliente-item {
+    background: #f9fafb;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    border: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.cliente-item:hover {
+    background: #fff;
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.cliente-info {
+    font-weight: 500;
+    color: #374151;
+}
+
+
+.cliente-item .ant-btn-text {
+    color: #9ca3af;
+}
+.cliente-item .ant-btn-text:hover {
+    color: #ef4444; 
+    background: rgba(254, 226, 226, 0.5);
+}
+
+
+@media (max-width: 768px) {
+    
+
+    .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date {
+        height: auto !important; 
+        min-height: 40px;
+        padding: 4px;
+    }
+    
+
+    .ant-picker-calendar-date-content {
+        height: auto !important;
+        overflow: hidden;
+    }
+
+
+    .salidas-container h1 {
+        font-size: 22px;
+        margin-bottom: 16px;
+    }
+
+
+    .salidas-card .ant-card-body {
+        max-height: none !important; 
+        padding: 10px !important;
+    }
+}

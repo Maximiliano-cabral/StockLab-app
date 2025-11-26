@@ -1,0 +1,127 @@
+
+.entradas-page {
+    width: 100%;
+    display: flex;
+    justify-content: center; 
+    align-items: flex-start;
+    padding-top: 40px; 
+}
+
+
+.entradas-page .ant-card {
+    width: 100%;
+    border-radius: 16px; 
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
+    overflow: hidden;
+    background: #fff;
+}
+
+
+.entradas-page .ant-card-head {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+}
+
+.entradas-page .ant-card-head-title {
+    font-size: 18px;
+    color: #1f2937;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+
+.entradas-page .anticon-plus-circle {
+    color: #52c41a; 
+    font-size: 22px;
+}
+
+
+.entradas-page .ant-card-body {
+    padding: 32px;
+}
+
+
+.entradas-page .ant-form-item-label label {
+    font-size: 15px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+
+.entradas-page .ant-input,
+.entradas-page .ant-input-number,
+.entradas-page .ant-input-number-input,
+.entradas-page .ant-select-selector {
+    height: 48px !important; 
+    border-radius: 8px !important;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+
+.entradas-page .ant-select-selection-item {
+    line-height: 46px !important;
+}
+
+
+.entradas-page .ant-input:focus,
+.entradas-page .ant-input-number:focus,
+.entradas-page .ant-select-focused .ant-select-selector {
+    border-color: #52c41a !important; 
+    box-shadow: 0 0 0 2px rgba(82, 196, 26, 0.1) !important;
+}
+
+
+.entradas-page .ant-btn-primary {
+    height: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    background: #52c41a; /* Verde */
+    border-color: #52c41a;
+    box-shadow: 0 4px 14px rgba(82, 196, 26, 0.3); 
+    transition: all 0.3s ease;
+}
+
+.entradas-page .ant-btn-primary:hover {
+    background: #73d13d !important; 
+    border-color: #73d13d !important;
+    transform: translateY(-2px); 
+}
+
+
+.entradas-page .ant-divider-horizontal {
+    margin: 32px 0;
+    border-color: #f0f0f0;
+}
+
+
+@media (max-width: 768px) {
+    .entradas-page {
+        padding: 16px;
+    }
+
+    .entradas-page .ant-card-body {
+        padding: 20px; 
+    }
+
+    .entradas-page .ant-card-head {
+        padding: 0 20px;
+    }
+
+    .entradas-page .ant-form-item {
+        margin-bottom: 20px;
+    }
+    
+    .entradas-page p.text-gray-500 {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+}
