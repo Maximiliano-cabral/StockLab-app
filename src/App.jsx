@@ -9,7 +9,7 @@ import MainLayout from './components/MainLayout/MainLayout';
 import Home from './vistas/Home/Home'; 
 import StockGeneral from './vistas/StockGeneral/StockGeneral'; 
 import Salidas from './vistas/Salida/Salidas'; 
-import Entradas from './vistas/Entrada/entada';
+import Entradas from './vistas/Entrada/Entrada';
 import StockBarriles from './vistas/StockBarriles/StockBarriles';
 
 
