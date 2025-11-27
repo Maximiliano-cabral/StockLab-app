@@ -1,4 +1,3 @@
-
 .stock-general-page h1 {
     color: #1f2937; 
     margin-bottom: 24px;
@@ -158,8 +157,5 @@
         margin-left: 8px;
     }
     
-
-    .ant-pagination {
-        display: none !important;
-    }
+    
 }
