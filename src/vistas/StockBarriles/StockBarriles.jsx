@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Statistic, Button, message, Spin } from 'antd';
 import { 
     CodeSandboxOutlined, 
-    DeleteOutlined,      
+    DeleteOutlined,      
     PlusOutlined, 
     MinusOutlined 
 } from '@ant-design/icons';
@@ -14,6 +14,9 @@ const StockBarriles = () => {
     const [metal, setMetal] = useState(0);
     const [plastico, setPlastico] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [metalPulse, setMetalPulse] = useState(false);
+    const [plasticoPulse, setPlasticoPulse] = useState(false);
+
     useEffect(() => {
         const metalRef = doc(db, 'barriles_vacios', 'metal');
         const plasticoRef = doc(db, 'barriles_vacios', 'plastico');
@@ -26,30 +29,56 @@ const StockBarriles = () => {
         };
 
         inicializarDb();
+        
         const unsubMetal = onSnapshot(metalRef, (doc) => {
-            if (doc.exists()) setMetal(doc.data().cantidad);
+            if (doc.exists()) {
+                const newMetal = doc.data().cantidad;
+                if (!loading && newMetal !== metal) {
+                    setMetalPulse(true);
+                    setTimeout(() => setMetalPulse(false), 400); 
+                }
+                setMetal(newMetal);
+            }
         });
+        
         const unsubPlastico = onSnapshot(plasticoRef, (doc) => {
-            if (doc.exists()) setPlastico(doc.data().cantidad);
-            setLoading(false);
+            if (doc.exists()) {
+                const newPlastico = doc.data().cantidad;
+                if (!loading && newPlastico !== plastico) {
+                    setPlasticoPulse(true);
+                    setTimeout(() => setPlasticoPulse(false), 400); 
+                }
+                setPlastico(newPlastico);
+                setLoading(false);
+            }
         });
 
         return () => {
             unsubMetal();
             unsubPlastico();
         };
-    }, []);
+    }, [loading, metal, plastico]);
 
     const modificarStock = async (tipo, cantidad) => {
         const ref = doc(db, 'barriles_vacios', tipo);
         try {
-            if (cantidad < 0 && ((tipo === 'metal' && metal === 0) || (tipo === 'plastico' && plastico === 0))) {
+            const currentStock = tipo === 'metal' ? metal : plastico;
+            
+            if (cantidad < 0 && currentStock === 0) {
                 return message.warning("No tienes stock para descontar.");
+            }
+
+            if (cantidad < 0 && currentStock + cantidad < 0) {
+                 await updateDoc(ref, {
+                    cantidad: 0
+                });
+                return message.warning("El stock no puede ser negativo. Establecido a 0.");
             }
 
             await updateDoc(ref, {
                 cantidad: increment(cantidad)
             });
+            
             message.success(cantidad > 0 ? "Barril agregado" : "Barril descontado");
         } catch (error) {
             console.error(error);
@@ -64,7 +93,7 @@ const StockBarriles = () => {
             <h1 className="titulo-pagina">Stock de Barriles Vacíos</h1>
             
             <Row gutter={[24, 24]} justify="center">
-                
+
                 <Col xs={24} md={10}>
                     <Card className="card-barril card-metal" hoverable>
                         <div className="icon-wrapper metal-icon">
@@ -74,7 +103,8 @@ const StockBarriles = () => {
                             title="Barriles de METAL" 
                             value={metal} 
                             suffix="unidades"
-                            valueStyle={{ color: '#262626', fontWeight: 'bold' }}
+                            valueStyle={{ fontWeight: 'bold' }}
+                            className={metalPulse ? 'metal-value stock-update-pulse' : 'metal-value'}
                         />
                         <div className="acciones-buttons">
                             <Button 
@@ -94,6 +124,8 @@ const StockBarriles = () => {
                         </div>
                     </Card>
                 </Col>
+                
+                
                 <Col xs={24} md={10}>
                     <Card className="card-barril card-plastico" hoverable>
                         <div className="icon-wrapper plastico-icon">
@@ -103,7 +135,8 @@ const StockBarriles = () => {
                             title="Barriles de PLÁSTICO" 
                             value={plastico} 
                             suffix="unidades"
-                            valueStyle={{ color: '#262626', fontWeight: 'bold' }}
+                            valueStyle={{ fontWeight: 'bold' }}
+                            className={plasticoPulse ? 'plastico-value stock-update-pulse' : 'plastico-value'}
                         />
                         <div className="acciones-buttons">
                             <Button 

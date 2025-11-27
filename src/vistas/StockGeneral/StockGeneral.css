@@ -4,7 +4,6 @@
     margin-bottom: 24px;
 }
 
-
 .stock-general-page .ant-card {
     border-radius: 12px;
     border: 1px solid #f0f0f0;
@@ -18,7 +17,6 @@
     font-size: 16px;
 }
 
-
 .stock-general-page .ant-table-thead > tr > th {
     background: #fafafa !important;
     color: #4b5563;
@@ -26,11 +24,9 @@
     border-bottom: 2px solid #e5e7eb;
 }
 
-
 .stock-general-page .ant-table-tbody > tr:hover > td {
     background: #f9fafb !important;
 }
-
 
 .stock-general-page .ant-btn {
     border-radius: 6px;
@@ -43,7 +39,6 @@
     color: #f5222d;
 }
 
-
 .stock-general-page .ant-tag {
     font-weight: 500;
     border-radius: 4px;
@@ -53,40 +48,118 @@
 }
 
 
+.mobile-info-row {
+    display: none;
+}
+
 @media (max-width: 768px) {
+    
+    .stock-general-page .desktop-only {
+        display: none !important;
+    }
+
+    .stock-general-page .ant-table-thead th.desktop-only {
+        display: none;
+    }
+
     .stock-general-page .ant-col-md-8 {
         text-align: left !important;
         margin-top: 12px;
     }
-
     .stock-general-page .ant-input-affix-wrapper {
         margin-bottom: 8px;
     }
-
     .stock-general-page .ant-card-head-wrapper {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
         padding-bottom: 10px;
     }
-    
     .stock-general-page .ant-card-extra {
         margin-left: 0 !important;
         width: 100%;
     }
-    
     .stock-general-page .ant-card-extra button {
         width: 100%; 
     }
-
     .stock-general-page .flex.space-x-2 {
         display: flex;
         flex-direction: column; 
         gap: 8px;
     }
-    
     .stock-general-page .flex.space-x-2 button {
         width: 100%; 
         margin-left: 0 !important; 
+    }
+
+
+    .ant-table-thead {
+        display: none;
+    }
+
+    .ant-table-tbody > tr > td {
+        display: block !important;
+        width: 100% !important;
+        padding: 12px 16px !important; 
+        border-bottom: none !important; 
+    }
+
+
+    .ant-table-tbody > tr {
+        display: block;
+        margin-bottom: 16px;
+        background: #ffffff; 
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+ 
+    .mobile-info-row {
+        display: flex; 
+        gap: 8px;
+        margin-top: 8px; 
+    }
+    
+    .product-title-cell {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1f2937 !important;
+    }
+
+
+    .stock-cell-wrapper {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        font-size: 13px;
+        color: #6b7280;
+    }
+    .stock-cell-wrapper .ant-tag {
+        margin-left: auto; 
+    }
+
+
+    .ant-table-tbody > tr > td:nth-child(2) { 
+        border-top: 1px solid #f0f0f0 !important; 
+    }
+
+
+    .actions-cell-wrapper {
+        display: flex;
+        justify-content: flex-end; 
+        width: 100%;
+        margin-top: 8px;
+    }
+    
+    .actions-cell-wrapper .ant-btn {
+        flex-grow: 1; 
+        max-width: 120px;
+        margin-left: 8px;
+    }
+    
+
+    .ant-pagination {
+        display: none !important;
     }
 }

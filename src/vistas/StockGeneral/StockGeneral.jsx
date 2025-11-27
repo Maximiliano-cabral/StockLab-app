@@ -3,7 +3,7 @@ import {
     Card, Tag, Row, Col, 
     Table, Input, Button, 
     Modal, Form, InputNumber, Select, 
-    Popconfirm, Spin, message 
+    Popconfirm, Spin, App 
 } from 'antd';
 import { 
     PlusOutlined, EditOutlined, DeleteOutlined, 
@@ -15,7 +15,10 @@ import './StockGeneral.css';
 
 const { Option } = Select;
 
-const StockGeneral = () => {
+const StockGeneralContent = () => {
+
+    // 2. INICIALIZAR EL CONTEXTO DE MENSAJES de Ant Design
+    const { message } = App.useApp(); 
 
     const { productos, isLoading, addProduct, updateProduct, deleteProduct } = useProducts();
     
@@ -50,7 +53,25 @@ const StockGeneral = () => {
         return nombre.toLowerCase().includes(searchText.toLowerCase());
     });
 
-    const stockBajoCount = listaLimpia.filter(p => p.stock < 50).length;
+
+    const isStockBajo = (producto) => {
+        const stockActual = producto.stock;
+        const unidad = producto.unidad;
+        
+        if (unidad === 'bidon') {
+            return stockActual < 5; 
+        }
+        
+        if (unidad === 'tn') {
+            return stockActual < 0.5; 
+        }
+
+        // Umbral por defecto para 'kg', 'litros', 'cajas', 'u', etc.
+        return stockActual < 50; 
+    };
+
+    const stockBajoCount = listaLimpia.filter(isStockBajo).length;
+
 
 
     const showModal = (product = null) => {
@@ -92,15 +113,15 @@ const StockGeneral = () => {
 
             if (editingProduct) {
                 await updateProduct(editingProduct.id, dataToSave);
-                message.success('Producto actualizado correctamente');
+                message.success('✍️ Producto actualizado correctamente');
             } else {
                 await addProduct(dataToSave);
-                message.success('Producto creado correctamente');
+                message.success('✅ Se agregó tu nuevo producto'); 
             }
             handleCancel();
         } catch (e) {
             console.error("Error al guardar:", e);
-            message.error("Error al guardar en la base de datos");
+            message.error("❌ Error al guardar en la base de datos");
         }
     };
     
@@ -108,10 +129,10 @@ const StockGeneral = () => {
         if (!id) return message.error("Error: ID no válido");
         try {
             await deleteProduct(id);
-            message.success('Producto eliminado');
+            message.success('🗑️ Producto eliminado correctamente');
         } catch (e) {
             console.error("Error al eliminar:", e);
-            message.error("No se pudo eliminar. Revisa tu conexión.");
+            message.error("❌ No se pudo eliminar. Revisa tu conexión.");
         }
     };
 
@@ -123,8 +144,25 @@ const StockGeneral = () => {
             width: '30%',
             sorter: (a, b) => (a.nombre || a.title || '').localeCompare(b.nombre || b.title || ''),
             render: (_, record) => (
-                <span className="font-medium text-gray-700">
+                <span className="product-title-cell font-medium text-gray-700">
                     {record.nombre || record.title || <span className="text-red-300">Sin Nombre</span>}
+                    <div className="mobile-info-row">
+                        <Tag 
+                            color={
+                                record.tipo_bulto === 'bolsa' ? 'green' : 
+                                record.tipo_bulto === 'caja' ? 'orange' : 
+                                record.tipo_bulto === 'bidon' ? 'purple' : 
+                                record.tipo_bulto === 'frasco' ? 'blue' :
+                                record.tipo_bulto === 'botella' ? 'blue' :
+                                'blue'
+                            }
+                        >
+                            {(record.tipo_bulto || 'OTRO').toUpperCase()}
+                        </Tag>
+                        <Tag color={record.comestible ? 'cyan' : 'red'}>
+                            {record.comestible ? 'COMESTIBLE' : 'NO COMESETIBLE'}
+                        </Tag>
+                    </div>
                 </span>
             )
         },
@@ -133,8 +171,18 @@ const StockGeneral = () => {
             dataIndex: 'tipo_bulto',
             key: 'tipo_bulto',
             width: '15%',
+            className: 'desktop-only', 
             render: (text) => (
-                <Tag color={text === 'bolsa' ? 'green' : text === 'caja' ? 'orange' : 'blue'}>
+                <Tag 
+                    color={
+                        text === 'bolsa' ? 'green' : 
+                        text === 'caja' ? 'orange' : 
+                        text === 'bidon' ? 'purple' : 
+                        text === 'frasco' ? 'blue' :
+                        text === 'botella' ? 'blue' :
+                        'blue'
+                    }
+                >
                     {(text || 'OTRO').toUpperCase()}
                 </Tag>
             ),
@@ -144,9 +192,10 @@ const StockGeneral = () => {
             dataIndex: 'comestible',
             key: 'comestible',
             width: '12%',
+            className: 'desktop-only', 
             render: (value) => (
                 <Tag color={value ? 'cyan' : 'red'}>
-                    {value ? 'COMESTIBLE' : 'NO COMESTIBLE'}
+                    {value ? 'COMESTIBLE' : 'NO COMESETIBLE'}
                 </Tag>
             ),
         },
@@ -157,14 +206,16 @@ const StockGeneral = () => {
             sorter: (a, b) => a.stock - b.stock,
             width: '18%',
             render: (text, record) => {
-                const isLow = record.stock < 50;
+                const isLow = isStockBajo(record); 
                 return (
-                    <Tag 
-                        color={isLow ? '#f50' : '#87d068'} 
-                        style={{ fontSize: '14px', padding: '4px 10px' }}
-                    >
-                        {text} {record.unidad || 'kg'}
-                    </Tag>
+                    <div className="stock-cell-wrapper"> 
+                        <Tag 
+                            color={isLow ? '#f50' : '#87d068'} 
+                            style={{ fontSize: '14px', padding: '4px 10px' }}
+                        >
+                            {text} {record.unidad || 'kg'}
+                        </Tag>
+                    </div>
                 );
             },
         },
@@ -173,7 +224,7 @@ const StockGeneral = () => {
             key: 'acciones',
             width: '25%',
             render: (_, record) => (
-                <div className="flex space-x-2">
+                <div className="actions-cell-wrapper flex space-x-2">
                     <Button 
                         icon={<EditOutlined />} 
                         onClick={() => showModal(record)}
@@ -206,7 +257,7 @@ const StockGeneral = () => {
         return (
             <div className="flex justify-center items-center h-full pt-20">
                 <Spin size="large" tip="Cargando inventario...">
-                     <div className="p-10" />
+                   <div className="p-10" />
                 </Spin>
             </div>
         );
@@ -261,7 +312,7 @@ const StockGeneral = () => {
                     dataSource={filteredProducts} 
                     rowKey="id"
                     pagination={{ pageSize: 8, showSizeChanger: false }}
-                    scroll={{ x: 800 }}
+                    scroll={{ x: 800 }} 
                 />
             </Card>
 
@@ -273,6 +324,7 @@ const StockGeneral = () => {
                 footer={null}
                 maskClosable={false}
             >
+                
                 <Form
                     form={form}
                     layout="vertical"
@@ -307,6 +359,7 @@ const StockGeneral = () => {
                                     <Option value="tn">Toneladas (tn)</Option> 
                                     <Option value="cajas">Cajas</Option>
                                     <Option value="litros">Litros</Option>
+                                    <Option value="bidon">Bidón</Option> 
                                     <Option value="u">Unidades</Option>
                                 </Select>
                             </Form.Item>
@@ -325,6 +378,7 @@ const StockGeneral = () => {
                                     <Option value="caja">Caja</Option>
                                     <Option value="frasco">Frasco</Option>
                                     <Option value="botella">Botella</Option>
+                                    <Option value="bidon">Bidón</Option> 
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -356,5 +410,11 @@ const StockGeneral = () => {
         </div>
     );
 };
+
+const StockGeneral = () => (
+    <App>
+        <StockGeneralContent />
+    </App>
+);
 
 export default StockGeneral;
