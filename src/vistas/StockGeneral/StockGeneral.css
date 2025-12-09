@@ -1,3 +1,4 @@
+
 .stock-general-page h1 {
     color: #1f2937; 
     margin-bottom: 24px;
@@ -46,13 +47,26 @@
     font-size: 11px;
 }
 
-
 .mobile-info-row {
     display: none;
 }
 
+
 @media (max-width: 768px) {
     
+    /* Ocultar padding innecesario en móvil */
+    .stock-general-page {
+        padding: 8px !important;
+    }
+    
+    /* Ajustar título principal */
+    .stock-general-page h1 {
+        font-size: 24px;
+        margin-bottom: 16px;
+        padding: 0 8px;
+    }
+    
+    /* Ocultar columnas desktop */
     .stock-general-page .desktop-only {
         display: none !important;
     }
@@ -61,101 +75,341 @@
         display: none;
     }
 
+    /* Ajustes de columnas */
     .stock-general-page .ant-col-md-8 {
         text-align: left !important;
         margin-top: 12px;
     }
+    
+    /* Búsqueda */
     .stock-general-page .ant-input-affix-wrapper {
-        margin-bottom: 8px;
+        margin-bottom: 12px;
+        font-size: 14px;
     }
+    
+    /* Header del card */
     .stock-general-page .ant-card-head-wrapper {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
-        padding-bottom: 10px;
+        gap: 12px;
+        padding: 12px 0;
     }
+    
+    .stock-general-page .ant-card-head {
+        padding: 12px 16px;
+    }
+    
+    .stock-general-page .ant-card-head-title {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
     .stock-general-page .ant-card-extra {
         margin-left: 0 !important;
         width: 100%;
     }
+    
     .stock-general-page .ant-card-extra button {
-        width: 100%; 
+        width: 100%;
+        height: 44px;
+        font-size: 15px;
+        font-weight: 500;
     }
+    
+    .stock-general-page .ant-card-body {
+        padding: 12px;
+    }
+    
+    /* Botones de acción en columna */
     .stock-general-page .flex.space-x-2 {
         display: flex;
         flex-direction: column; 
         gap: 8px;
     }
+    
     .stock-general-page .flex.space-x-2 button {
         width: 100%; 
-        margin-left: 0 !important; 
+        margin-left: 0 !important;
+        height: 40px;
+        font-size: 14px;
     }
-
-
+    
+    /* Ocultar header de la tabla */
     .ant-table-thead {
         display: none;
     }
+    
+    /* FORZAR eliminación del scroll horizontal */
+    .stock-general-page .ant-table-wrapper,
+    .stock-general-page .ant-table-wrapper .ant-spin-nested-loading,
+    .stock-general-page .ant-table-wrapper .ant-spin-container,
+    .stock-general-page .ant-table,
+    .stock-general-page .ant-table-container,
+    .stock-general-page .ant-table-content,
+    .stock-general-page .ant-table-body {
+        overflow-x: visible !important;
+        overflow-y: visible !important;
+        max-width: 100% !important;
+    }
+    
+    /* Forzar que la tabla no tenga width mínimo */
+    .stock-general-page .ant-table-content > table {
+        width: 100% !important;
+        min-width: auto !important;
+        table-layout: fixed !important;
+    }
+    
+    /* Forzar ancho completo en todos los niveles */
+    .stock-general-page .ant-table-content,
+    .stock-general-page .ant-table-content table,
+    .stock-general-page .ant-table-content table > tbody {
+        width: 100% !important;
+        display: block !important;
+    }
+    
+    /* Remover cualquier scroll container */
+    .stock-general-page .ant-table-body {
+        overflow: visible !important;
+    }
 
+    /* Convertir filas en cards */
+    .ant-table-tbody > tr {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 12px;
+        background: #ffffff; 
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+    
+    /* Forzar que el tbody ocupe todo el ancho */
+    .stock-general-page .ant-table-tbody {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .ant-table-tbody > tr:active {
+        transform: scale(0.98);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Celdas como bloques */
     .ant-table-tbody > tr > td {
         display: block !important;
         width: 100% !important;
-        padding: 12px 16px !important; 
+        padding: 0 !important;
         border-bottom: none !important; 
-    }
-
-
-    .ant-table-tbody > tr {
-        display: block;
-        margin-bottom: 16px;
-        background: #ffffff; 
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        background: transparent !important;
     }
     
- 
-    .mobile-info-row {
-        display: flex; 
-        gap: 8px;
-        margin-top: 8px; 
+    /* Primera celda: Nombre del producto + tags */
+    .ant-table-tbody > tr > td:first-child {
+        padding: 16px 16px 12px 16px !important;
     }
     
+    /* Celda de stock */
+    .ant-table-tbody > tr > td:nth-child(4) {
+        padding: 12px 16px !important;
+        border-top: 1px solid #f3f4f6 !important;
+        border-bottom: 1px solid #f3f4f6 !important;
+        background-color: #fafafa !important;
+    }
+    
+    /* Celda de acciones */
+    .ant-table-tbody > tr > td:last-child {
+        padding: 12px 16px 16px 16px !important;
+        background: white !important;
+    }
+    
+    /* Nombre del producto */
     .product-title-cell {
-        font-size: 16px;
-        font-weight: 600;
+        font-size: 15px !important;
+        font-weight: 600 !important;
         color: #1f2937 !important;
+        line-height: 1.4 !important;
+        display: block;
+        margin-bottom: 0 !important;
     }
-
-
+    
+    /* Tags de tipo y clasificación */
+    .mobile-info-row {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px !important;
+    }
+    
+    .mobile-info-row .ant-tag {
+        margin: 0 !important;
+        font-size: 10px !important;
+        padding: 3px 8px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.3px;
+    }
+    
+    /* Stock con ícono */
     .stock-cell-wrapper {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        font-size: 13px;
-        color: #6b7280;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
     }
+    
+    .stock-cell-wrapper::before {
+        content: "";
+        font-size: 16px;
+        margin-right: 8px;
+    }
+    
     .stock-cell-wrapper .ant-tag {
-        margin-left: auto; 
+        font-size: 14px !important;
+        padding: 6px 12px !important;
+        font-weight: 700 !important;
+        border-radius: 6px !important;
+        margin: 0 !important;
     }
-
-
-    .ant-table-tbody > tr > td:nth-child(2) { 
-        border-top: 1px solid #f0f0f0 !important; 
-    }
-
-
+    
+    /* Botones de acción */
     .actions-cell-wrapper {
-        display: flex;
-        justify-content: flex-end; 
-        width: 100%;
-        margin-top: 8px;
+        display: flex !important;
+        gap: 8px !important;
+        width: 100% !important;
     }
     
-    .actions-cell-wrapper .ant-btn {
-        flex-grow: 1; 
-        max-width: 120px;
-        margin-left: 8px;
+    .actions-cell-wrapper button {
+        flex: 1 !important;
+        height: 42px !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        font-size: 13px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .actions-cell-wrapper .ant-btn-default {
+        background: #f3f4f6 !important;
+        border-color: #e5e7eb !important;
+        color: #374151 !important;
+    }
+    
+    .actions-cell-wrapper .ant-btn-default:active {
+        background: #e5e7eb !important;
+    }
+    
+    .actions-cell-wrapper .ant-btn-danger {
+        background: #fef2f2 !important;
+        border-color: #fecaca !important;
+        color: #dc2626 !important;
+    }
+    
+    .actions-cell-wrapper .ant-btn-danger:active {
+        background: #fee2e2 !important;
+    }
+    
+    .stock-general-page .ant-pagination {
+        text-align: center !important;
+        margin-top: 16px !important;
+    }
+    
+    .stock-general-page .ant-pagination-item,
+    .stock-general-page .ant-pagination-prev,
+    .stock-general-page .ant-pagination-next {
+        min-width: 36px !important;
+        height: 36px !important;
+        line-height: 36px !important;
+        margin: 0 4px !important;
     }
     
     
+    .ant-modal {
+        max-width: calc(100vw - 32px) !important;
+        margin: 16px auto !important;
+        top: 20px !important;
+    }
+    
+    .ant-modal-content {
+        border-radius: 16px !important;
+    }
+    
+    .ant-modal-header {
+        padding: 16px 20px !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+    
+    .ant-modal-body {
+        padding: 20px !important;
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+    }
+    
+    .ant-modal-footer {
+        padding: 12px 20px 16px !important;
+    }
+    
+    .ant-form-item {
+        margin-bottom: 16px !important;
+    }
+    
+    .ant-form-item-label {
+        padding-bottom: 4px !important;
+    }
+    
+    .ant-form-item-label > label {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+    }
+    
+    .ant-input,
+    .ant-input-number,
+    .ant-select-selector {
+        height: 44px !important;
+        font-size: 15px !important;
+        border-radius: 8px !important;
+    }
+    
+    .ant-input-number-input {
+        height: 42px !important;
+    }
+    
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        padding: 0 11px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    
+    /* Botones del modal */
+    .ant-modal-footer button {
+        height: 44px !important;
+        font-size: 15px !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Animación suave al cargar */
+    .ant-table-tbody > tr {
+        animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Mejorar alert de stock bajo */
+    .stock-general-page .ant-tag.ant-tag-error {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+    }
 }

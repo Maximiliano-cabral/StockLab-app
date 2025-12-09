@@ -312,7 +312,6 @@ const StockGeneralContent = () => {
                     dataSource={filteredProducts} 
                     rowKey="id"
                     pagination={{ pageSize: 8, showSizeChanger: false, simple: true }}
-                    scroll={{ x: 800 }} 
                 />
             </Card>
 
