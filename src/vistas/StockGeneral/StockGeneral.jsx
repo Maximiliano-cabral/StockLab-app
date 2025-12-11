@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import { 
     PlusOutlined, EditOutlined, DeleteOutlined, 
-    SearchOutlined, AlertOutlined 
+    SearchOutlined, AlertOutlined, MinusOutlined 
 } from '@ant-design/icons';
 import { useProducts } from '../../Hooks/useProducts'; 
 import ProductCards from '../../components/ProductCards/ProductCards';
@@ -27,6 +27,11 @@ const StockGeneralContent = () => {
     const [editingProduct, setEditingProduct] = useState(null);
     const [form] = Form.useForm();
     
+    //Estados para el modal de gestión de stock
+    const [isStockModalVisible, setIsStockModalVisible] = useState(false);
+    const [stockAction, setStockAction] = useState(null); 
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [stockForm] = Form.useForm();
 
     const productosUnicos = [];
     const mapaNombres = new Map();
@@ -72,7 +77,44 @@ const StockGeneralContent = () => {
 
     const stockBajoCount = listaLimpia.filter(isStockBajo).length;
 
+    //Función para mostrar el modal de gestión de stock
+    const showStockModal = (product, action) => {
+        setSelectedProduct(product);
+        setStockAction(action);
+        stockForm.resetFields();
+        setIsStockModalVisible(true);
+    };
 
+    //Función para manejar el cambio de stock
+    const handleStockChange = async (values) => {
+        try {
+            const cantidad = Number(values.cantidad);
+            let nuevoStock;
+
+            if (stockAction === 'add') {
+                nuevoStock = selectedProduct.stock + cantidad;
+            } else {
+                nuevoStock = Math.max(0, selectedProduct.stock - cantidad);
+            }
+
+            await updateProduct(selectedProduct.id, {
+                ...selectedProduct,
+                stock: nuevoStock
+            });
+
+            message.success(
+                stockAction === 'add' 
+                    ? `✅ Se agregaron ${cantidad} ${selectedProduct.unidad}` 
+                    : `✅ Se descontaron ${cantidad} ${selectedProduct.unidad}`
+            );
+            
+            setIsStockModalVisible(false);
+            stockForm.resetFields();
+        } catch (e) {
+            console.error("Error al actualizar stock:", e);
+            message.error("❌ Error al actualizar el stock");
+        }
+    };
 
     const showModal = (product = null) => {
         setEditingProduct(product);
@@ -141,7 +183,7 @@ const StockGeneralContent = () => {
         {
             title: 'Producto',
             key: 'nombre', 
-            width: '30%',
+            width: '25%',
             sorter: (a, b) => (a.nombre || a.title || '').localeCompare(b.nombre || b.title || ''),
             render: (_, record) => (
                 <span className="product-title-cell font-medium text-gray-700">
@@ -170,7 +212,7 @@ const StockGeneralContent = () => {
             title: 'Tipo',
             dataIndex: 'tipo_bulto',
             key: 'tipo_bulto',
-            width: '15%',
+            width: '12%',
             className: 'desktop-only', 
             render: (text) => (
                 <Tag 
@@ -191,7 +233,7 @@ const StockGeneralContent = () => {
             title: 'Clasificación',
             dataIndex: 'comestible',
             key: 'comestible',
-            width: '12%',
+            width: '10%',
             className: 'desktop-only', 
             render: (value) => (
                 <Tag color={value ? 'cyan' : 'red'}>
@@ -204,7 +246,7 @@ const StockGeneralContent = () => {
             dataIndex: 'stock',
             key: 'stock',
             sorter: (a, b) => a.stock - b.stock,
-            width: '18%',
+            width: '12%',
             render: (text, record) => {
                 const isLow = isStockBajo(record); 
                 return (
@@ -220,34 +262,83 @@ const StockGeneralContent = () => {
             },
         },
         {
-            title: 'Acciones',
-            key: 'acciones',
-            width: '25%',
+            title: 'Gestión Stock',
+            key: 'gestion_stock',
+            width: '18%',
+            className: 'desktop-only',
             render: (_, record) => (
-                <div className="actions-cell-wrapper flex space-x-2">
+                <div className="flex space-x-2">
                     <Button 
-                        icon={<EditOutlined />} 
-                        onClick={() => showModal(record)}
+                        type="primary"
+                        style={{ backgroundColor: '#52c41a' }}
+                        icon={<PlusOutlined />}
+                        onClick={() => showStockModal(record, 'add')}
                         size="small"
                     >
-                        Editar
+                        Agregar
                     </Button>
-                    <Popconfirm
-                        title="Eliminar producto"
-                        description="¿Estás seguro? Esta acción no se deshace."
-                        onConfirm={() => handleDelete(record.id)}
-                        okText="Sí, eliminar"
-                        cancelText="Cancelar"
-                        okButtonProps={{ danger: true }}
+                    <Button 
+                        style={{ backgroundColor: '#fa8c16', borderColor: '#fa8c16', color: 'white' }}
+                        icon={<MinusOutlined />}
+                        onClick={() => showStockModal(record, 'subtract')}
+                        size="small"
                     >
+                        Descontar
+                    </Button>
+                </div>
+            ),
+        },
+        {
+            title: 'Acciones',
+            key: 'acciones',
+            width: '23%',
+            render: (_, record) => (
+                <div className="actions-cell-wrapper">
+                    {/* Botones de gestión de stock en móvil */}
+                    <div className="flex space-x-2 mb-2 mobile-only">
                         <Button 
-                            icon={<DeleteOutlined />} 
-                            danger 
+                            type="primary"
+                            style={{ backgroundColor: '#52c41a', flex: 1 }}
+                            icon={<PlusOutlined />}
+                            onClick={() => showStockModal(record, 'add')}
                             size="small"
                         >
-                            Eliminar
+                            +
                         </Button>
-                    </Popconfirm>
+                        <Button 
+                            style={{ backgroundColor: '#fa8c16', borderColor: '#fa8c16', color: 'white', flex: 1 }}
+                            icon={<MinusOutlined />}
+                            onClick={() => showStockModal(record, 'subtract')}
+                            size="small"
+                        >
+                            -
+                        </Button>
+                    </div>
+                    <div className="flex space-x-2">
+                        <Button 
+                            icon={<EditOutlined />} 
+                            onClick={() => showModal(record)}
+                            size="small"
+                        >
+                            Editar
+                        </Button>
+                        <Popconfirm
+                            title="Eliminar producto"
+                            description="¿Estás seguro? Esta acción no se deshace."
+                            onConfirm={() => handleDelete(record.id)}
+                            okText="Sí, eliminar"
+                            cancelText="Cancelar"
+                            okButtonProps={{ danger: true }}
+                        >
+                            <Button 
+                                icon={<DeleteOutlined />} 
+                                danger 
+                                size="small"
+                            >
+                                Eliminar
+                            </Button>
+                        </Popconfirm>
+                    </div>
                 </div>
             ),
         },
@@ -314,8 +405,6 @@ const StockGeneralContent = () => {
                     pagination={{ pageSize: 8, showSizeChanger: false, simple: true }}
                 />
             </Card>
-
-
             <Modal
                 title={editingProduct ? "✏️ Editar Producto" : "➕ Agregar Nuevo Producto"}
                 open={isModalVisible}
@@ -323,7 +412,6 @@ const StockGeneralContent = () => {
                 footer={null}
                 maskClosable={false}
             >
-                
                 <Form
                     form={form}
                     layout="vertical"
@@ -387,8 +475,8 @@ const StockGeneralContent = () => {
                                 name="comestible"
                             >
                                 <Select size="large">
-                                    <Option value={true}> Comestible</Option>
-                                    <Option value={false}> No Comestible</Option>
+                                    <Option value={true}>✅ Comestible</Option>
+                                    <Option value={false}>🚫 No Comestible</Option>
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -405,6 +493,94 @@ const StockGeneralContent = () => {
                         </Button>
                     </div>
                 </Form>
+            </Modal>
+            <Modal
+                title={
+                    <div className="flex items-center gap-2">
+                        {stockAction === 'add' ? (
+                            <>
+                                <PlusOutlined style={{ color: '#52c41a', fontSize: '20px' }} />
+                                <span>Agregar Mercadería</span>
+                            </>
+                        ) : (
+                            <>
+                                <MinusOutlined style={{ color: '#fa8c16', fontSize: '20px' }} />
+                                <span>Descontar Mercadería</span>
+                            </>
+                        )}
+                    </div>
+                }
+                open={isStockModalVisible}
+                onCancel={() => {
+                    setIsStockModalVisible(false);
+                    stockForm.resetFields();
+                }}
+                footer={null}
+                maskClosable={false}
+            >
+                {selectedProduct && (
+                    <>
+                        <div className="mb-4">
+                            <p className="text-sm text-gray-500 mb-1">Producto:</p>
+                            <p className="font-semibold text-lg">{selectedProduct.nombre || selectedProduct.title}</p>
+                        </div>
+
+                        <div className="mb-6">
+                            <p className="text-sm text-gray-500 mb-1">Stock actual:</p>
+                            <Tag 
+                                color={isStockBajo(selectedProduct) ? '#f50' : '#87d068'} 
+                                style={{ fontSize: '16px', padding: '6px 12px' }}
+                            >
+                                {selectedProduct.stock} {selectedProduct.unidad}
+                            </Tag>
+                        </div>
+
+                        <Form
+                            form={stockForm}
+                            layout="vertical"
+                            onFinish={handleStockChange}
+                        >
+                            <Form.Item
+                                label={`Cantidad a ${stockAction === 'add' ? 'agregar' : 'descontar'}:`}
+                                name="cantidad"
+                                rules={[
+                                    { required: true, message: 'Ingrese una cantidad' },
+                                    { type: 'number', min: 0.01, message: 'Debe ser mayor a 0' }
+                                ]}
+                            >
+                                <InputNumber 
+                                    style={{ width: '100%' }} 
+                                    min={0.01}
+                                    placeholder={`Ingrese cantidad en ${selectedProduct.unidad}`}
+                                    size="large"
+                                />
+                            </Form.Item>
+
+                            <div className="flex justify-end gap-3 mt-6">
+                                <Button 
+                                    onClick={() => {
+                                        setIsStockModalVisible(false);
+                                        stockForm.resetFields();
+                                    }}
+                                    size="large"
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button 
+                                    type="primary" 
+                                    htmlType="submit"
+                                    size="large"
+                                    style={{
+                                        backgroundColor: stockAction === 'add' ? '#52c41a' : '#fa8c16',
+                                        borderColor: stockAction === 'add' ? '#52c41a' : '#fa8c16'
+                                    }}
+                                >
+                                    Confirmar
+                                </Button>
+                            </div>
+                        </Form>
+                    </>
+                )}
             </Modal>
         </div>
     );

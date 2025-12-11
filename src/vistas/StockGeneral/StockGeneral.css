@@ -413,3 +413,14 @@
         font-weight: 500 !important;
     }
 }
+/* Mostrar solo en móvil */
+.mobile-only {
+    display: flex;
+}
+
+/* Ocultar en desktop */
+@media (min-width: 768px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
