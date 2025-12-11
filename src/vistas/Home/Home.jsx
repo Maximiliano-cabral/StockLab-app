@@ -45,10 +45,29 @@ const Home = () => {
         return Array.from(mapaNombres.values());
     }, [productos]); 
 
-    const stockBajoCount = productosLimpios.filter(p => p.stock < 50).length;
+    // Misma lógica que en StockGeneral
+    const isStockBajo = (producto) => {
+        const stockActual = producto.stock;
+        const unidad = producto.unidad;
+        
+        if (unidad === 'bidon') {
+            return stockActual < 5; 
+        }
+        
+        if (unidad === 'tn') {
+            return stockActual < 0.5; 
+        }
+
+        // Umbral por defecto para 'kg', 'litros', 'cajas', 'u', etc.
+        return stockActual < 50; 
+    };
+    const stockBajoCount = productosLimpios.filter(isStockBajo).length;
+
     const hoy = dayjs().startOf('day');
     const pedidosPendientesCount = salidasPedidos.filter(s => dayjs(s.fecha).isAfter(hoy)).length;
+    
     console.log('🏠 Home - Total Limpio:', productosLimpios.length);
+    
     if (isProductsLoading || isSalidasLoading || isBarrilesLoading) {
         return (
             <div className="flex justify-center items-center h-full pt-10">

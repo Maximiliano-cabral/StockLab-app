@@ -270,7 +270,7 @@ const StockGeneralContent = () => {
                 <div className="flex space-x-2">
                     <Button 
                         type="primary"
-                        style={{ backgroundColor: '#52c41a' }}
+                        style={{ backgroundColor: '#52c41a'}}
                         icon={<PlusOutlined />}
                         onClick={() => showStockModal(record, 'add')}
                         size="small"
